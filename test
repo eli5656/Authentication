@@ -2,21 +2,24 @@ import { Selector } from 'testcafe'
 
 fixture `Authentication tests`
     .page `https://testcafe.io/`
-test('my first testcafe test',async t => {
-    const GetStartedExists = Selector('.info-btn').withText('Get Started');
-    if(await GetStartedExists.exists){
-        console.log("get started Exists")
-    }
-
-    const LinkBarItems = Selector('header nav ul li a'); 
-    const LinkBarCount = await LinkBarItems.count;
-
-     for(let i=0; i<LinkBarCount; i++){ 
-        await t.click(LinkBarItems.nth(i)) 
-        if(!await GetStartedExists.exists){
-            console.log("get started not Exists")
-        }
-        await t.navigateTo("https://testcafe.io/"); 
-        console.log(await LinkBarItems.nth(i).innerText + " " + i)
-    }
+test
+    .before( async t => {
+    console.log("test is start....")
 })
+
+('Authentication tests',async t => {
+        const GetStartedExists = Selector('.info-btn').withText('Get Started');
+        if(await GetStartedExists.exists)
+            console.log("Get Started Exists")
+
+        const LinkBarItems = Selector('header nav ul li a'); 
+        const LinkBarCount = await LinkBarItems.count;
+
+        for(let i=0; i<LinkBarCount; i++){ 
+            await t.click(LinkBarItems.nth(i)) 
+            if(!await GetStartedExists.exists)
+                console.log("Get Started not Exists")
+            await t.navigateTo("https://testcafe.io/"); 
+            console.log(await LinkBarItems.nth(i).innerText + " " + i)
+        }
+    })
