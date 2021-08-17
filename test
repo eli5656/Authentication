@@ -1,25 +1,26 @@
 import { Selector } from 'testcafe'
-
+const HomePage = "https://testcafe.io/";
+const Possible_links = ["Docs","FAQ","Support","Release Notes","Team Blog1","TestCafe Studio"]
+const GetStartedButton = Selector('.info-btn').withText('Get Started');
 fixture `Authentication tests`
-    .page `https://testcafe.io/`
-test
-    .before( async t => {
+.page `${HomePage}`
+
+.before( async t => {
     console.log("test is start....")
 })
-
-('Authentication tests',async t => {
-        const GetStartedExists = Selector('.info-btn').withText('Get Started');
-        if(await GetStartedExists.exists)
-            console.log("Get Started Exists")
-
-        const LinkBarItems = Selector('header nav ul li a'); 
-        const LinkBarCount = await LinkBarItems.count;
-
-        for(let i=0; i<LinkBarCount; i++){ 
-            await t.click(LinkBarItems.nth(i)) 
-            if(!await GetStartedExists.exists)
-                console.log("Get Started not Exists")
-            await t.navigateTo("https://testcafe.io/"); 
-            console.log(await LinkBarItems.nth(i).innerText + " " + i)
-        }
-    })
+test('existence of the ‘Get Started',async t => { // this test check if get started button is exist if not send err
+    await t.expect(GetStartedButton.exists).ok('this assertion will fail') // check if get started button is exist
+})
+//   this test collect all links bar from main and click one by one if is exist in Possible_links after click is check if have get
+//   started button in exist and send to console log name of link and index send err after thet she back to main page 
+test('nav-links', async t => {
+    const LinkBarItems = Selector('header nav ul li a'); 
+    const LinkBarCount = await LinkBarItems.count;
+    for(let i=0; i<LinkBarCount && Possible_links.indexOf(`${await LinkBarItems.nth(i).innerText}`) != -1; i++){ 
+        await t
+            .click(LinkBarItems.nth(i)) 
+            .expect(GetStartedButton.exists).notOk('this assertion will fail')
+            .navigateTo(HomePage); 
+        console.log(`inner text (${await LinkBarItems.nth(i).innerText}) index [${i}]`)
+    }
+});
