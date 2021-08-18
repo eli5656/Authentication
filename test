@@ -1,12 +1,18 @@
 import { Selector } from 'testcafe'
+import { ClientFunction } from 'testcafe'
 const HomePage = "https://testcafe.io/";
 const Possible_links = ["Docs","FAQ","Support","Release Notes","Team Blog1","TestCafe Studio"]
 const GetStartedButton = Selector('.info-btn').withText('Get Started');
+
+const getLocation = ClientFunction(() => document.location.href.toString());
 fixture `Authentication tests`
 .page `${HomePage}`
 
 .before( async t => {
     console.log("test is start....")
+})
+test('check if is currect page',async t => {
+    await t.expect(getLocation()).contains(HomePage,'is not currect page');
 })
 test('existence of the ‘Get Started',async t => { // this test check if get started button is exist if not send err
     await t.expect(GetStartedButton.exists).ok('this assertion will fail') // check if get started button is exist
