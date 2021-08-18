@@ -1,9 +1,7 @@
 import { Selector } from 'testcafe'
 import { ClientFunction } from 'testcafe'
 const HomePage = "https://testcafe.io/";
-const Possible_links = ["Docs","FAQ","Support","Release Notes","Team Blog1","TestCafe Studio"]
 const GetStartedButton = Selector('.info-btn').withText('Get Started');
-
 const getLocation = ClientFunction(() => document.location.href.toString());
 fixture `Authentication tests`
 .page `${HomePage}`
@@ -23,8 +21,6 @@ test('nav-links', async t => {
     const LinkBarItems = Selector('header nav ul li a'); 
     const LinkBarCount = await LinkBarItems.count;
     for(let i=0; i<LinkBarCount; i++){ 
-        if(Possible_links.indexOf(`${await LinkBarItems.nth(i).innerText}`) === -1)
-            continue;
         await t
             .click(LinkBarItems.nth(i)) 
             .expect(GetStartedButton.exists).notOk('this assertion will fail')
