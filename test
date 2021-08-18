@@ -16,7 +16,9 @@ test('existence of the ‘Get Started',async t => { // this test check if get st
 test('nav-links', async t => {
     const LinkBarItems = Selector('header nav ul li a'); 
     const LinkBarCount = await LinkBarItems.count;
-    for(let i=0; i<LinkBarCount && Possible_links.indexOf(`${await LinkBarItems.nth(i).innerText}`) != -1; i++){ 
+    for(let i=0; i<LinkBarCount; i++){ 
+        if(Possible_links.indexOf(`${await LinkBarItems.nth(i).innerText}`) === -1)
+            continue;
         await t
             .click(LinkBarItems.nth(i)) 
             .expect(GetStartedButton.exists).notOk('this assertion will fail')
